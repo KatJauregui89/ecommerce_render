@@ -1,0 +1,81 @@
+const users = require('./users.models');
+const cart = require('./cart.models');
+const order = require('./order.models');
+const product = require('./product.models');
+const productInOrder = require('./ProductInOrder.models');
+const productInCart = require('./ProductInCart.models');
+
+const initModels = () => {
+
+  users.hasMany(product, {
+    as: 'products',
+    foreignKey: 'user_id',
+  });
+
+  product.belongsTo(users, {
+    as: 'user',
+    foreignKey: 'user_id',
+  });
+
+  users.hasMany(order, {
+    as: 'orders',
+    foreignKey: 'user_id',
+  });
+
+  order.belongsTo(users, {
+    as: 'user',
+    foreignKey: 'user_id',
+  });
+
+  users.hasOne(cart, {
+    as: 'cart',
+    foreignKey: 'user_id',
+  });
+
+  cart.belongsTo(users, {
+    as: 'user',
+    foreignKey: 'user_id',
+  });
+
+  product.hasMany(productInCart, {
+    as: 'productInCart',
+    foreignKey: 'product_id',
+  });
+
+  productInCart.belongsTo(product, {
+    as: 'product',
+    foreignKey: 'product_id',
+  });
+
+  product.hasMany(productInOrder, {
+    as: 'productInOrder',
+    foreignKey: 'product_id',
+  });
+
+  productInOrder.belongsTo(product, {
+    as: 'product',
+    foreignKey: 'product_id',
+  });
+
+  productInCart.belongsTo(cart, {
+    as: 'cart',
+    foreignKey: 'cart_id',
+  });
+
+  cart.hasMany(productInCart, {
+    as: 'productsInCart',
+    foreignKey: 'cart_id',
+  });
+
+  productInOrder.belongsTo(order, {
+    as: 'order',
+    foreignKey: 'order_id',
+  });
+
+  order.hasMany(productInOrder, {
+    as: 'productsInOrder',
+    foreignKey: 'order_id',
+  });
+};
+
+module.exports = initModels;
